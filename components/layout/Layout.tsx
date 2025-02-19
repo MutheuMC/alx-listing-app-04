@@ -1,7 +1,7 @@
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC = ({ children }) => {
   return (
     <>
       <Header />
@@ -9,6 +9,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Footer />
     </>
   );
-};
+}
 
 export default Layout;

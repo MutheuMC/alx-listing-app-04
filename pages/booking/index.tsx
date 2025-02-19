@@ -1,43 +1,28 @@
-import axios from "axios";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import BookingForm from "@/components/booking/BookingForm";
+import OrderSummary from "@/components/booking/OrderSummary";
+import CancellationPolicy from "@/components/booking/CancellationPolicy";
 
-export default function BookingForm() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
-    billingAddress: "",
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post("/api/bookings", formData);
-      alert("Booking confirmed!");
-    } catch (error) {
-      setError("Failed to submit booking.");
-    } finally {
-      setLoading(false);
-    }
+export default function BookingPage() {
+  const router = useRouter();
+  const { id, propertyName, price, bookingFee, totalNights, startDate, propertyImage } = router.query;
+  if (!id) return <p>Loading booking details...</p>;
+  const bookingDetails = {
+  propertyName: propertyName as string,
+  price: Number(price),
+  bookingFee: Number(bookingFee),
+  totalNights: Number(totalNights),
+  startDate: startDate as string,
+  propertyImage: propertyImage as string,
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Form fields for booking details */}
-      <button type="submit" disabled={loading}>
-        {loading ? "Processing..." : "Confirm & Pay"}
-      </button>
-      {error && <p className="text-red-500">{error}</p>}
-    </form>
+    <div className="container mx-auto p-6">
+      <div className="grid grid-cols-2 gap-6">
+        <BookingForm />
+        <OrderSummary bookingDetails={bookingDetails} />
+        <CancellationPolicy />
+      </div>
+    </div>
   );
 }

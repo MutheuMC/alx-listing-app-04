@@ -1,21 +1,28 @@
-import React from 'react';
+import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { CardProps } from "@/interfaces";
 
-interface CardProps {
-  title: string;
-  description: string;
-  image: string;
-  children?: React.ReactNode;
-}
+const Card: React.FC<CardProps & { id: number }> = ({ id, image, name, price, rating }) => {
+  const router = useRouter();
 
-const Card: React.FC<CardProps> = ({ title, description, image, children }) => {
+  const handleClick = () => {
+    router.push(`/property/${id}`);
+  };
+
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-      <img className="w-full" src={image} alt={title} />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{title}</div>
-        <p className="text-gray-700 text-base">{description}</p>
+    <div className="border p-4 rounded-lg shadow-md bg-white cursor-pointer" onClick={handleClick}>
+      <div className="relative w-full h-48 mb-4">
+        <Image src={image} alt={name} layout="fill" objectFit="cover" className="rounded-t-lg" />
       </div>
-      <div className="px-6 pt-4 pb-2">{children}</div>
+      <div className="flex flex-col items-start">
+        <h2 className="text-xl font-bold mb-2">{name}</h2>
+        <p className="text-gray-700 mb-2">${price} / night</p>
+        <div className="flex items-center">
+          <span className="text-yellow-500 mr-1">★</span>
+          <span className="text-gray-700">{rating}</span>
+        </div>
+      </div>
     </div>
   );
 };
